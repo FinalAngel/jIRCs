@@ -26,8 +26,6 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 // disable console for ie
-var console = {};
-	console.log = function(){};
 
 /* Public interface */
 function jIRCs(conn) {
@@ -51,7 +49,7 @@ function jIRCs(conn) {
     this.conn.onopen = function(e) { this.parent.onconnect(e); };
     this.conn.onmessage = function(e) { this.parent.onmessage(e); };
     this.conn.onclose = function(e) { this.parent.ondisconnect(e); };
-};
+}
 
 jIRCs.prototype.version = 'jIRCs 0.1';
 
