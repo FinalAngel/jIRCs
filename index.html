@@ -4,6 +4,7 @@
 	<title>jIRCs Test</title>
 	<script src="js/libs/sockjs.min.js"></script>
 	<script src="js/libs/jquery.min.js"></script>
+	<script src="js/libs/class.min.js"></script>
 	<script src="js/libs/cookies.js"></script>
 
 	<script src="js/jircs.js"></script>
@@ -35,22 +36,7 @@
 </div>
 <script>
 jQuery(document).ready(function ($) {
-	// hide nojs warning
-	$('.nojs').hide();
-	// attach event to login form element
-	$('form').on('submit', function (e) {
-		e.preventDefault();
-		var container = $('#jircs');
-			container.find('.login').hide();
-		// saving credentials
-		var username = $(this).find('input[name="username"]').val();
-		var password = 'foobar';
-
-		// starting up jIRCs app
-		var irc = new jIRCs(new SockJS("https://irc.desertbus.org/"));
-			irc.nick(username, password);
-			irc.display(container[0]);
-	});
+	new jIRCs('#jircs');
 });
 </script>
 </body>

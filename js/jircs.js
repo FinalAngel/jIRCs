@@ -26,58 +26,89 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 // disable console for ie
+var jIRCs = new Class({
 
-/* Public interface */
-function jIRCs(conn) {
-    this.buf = '';
-    this.queue = [];
-    this.displays = [];
-    this.channels = {};
-    this.chantypes = [];
-    this.statuses = {};
-    this.statusOrder = [];
-    this.statusSymbols = {};
-    this.chanModes = {};
-    this.userModes = [];
-    this.scrollbackSize = 500;
-    this.nickname = '';
-    this.registered = false;
-    this.connected = false;
-    this.account = false;
-    this.conn = conn;
-    this.conn.parent = this;
-    this.conn.onopen = function(e) { this.parent.onconnect(e); };
-    this.conn.onmessage = function(e) { this.parent.onmessage(e); };
-    this.conn.onclose = function(e) { this.parent.ondisconnect(e); };
-}
+	initialize: function (container) {
+		this.container = $(container);
+		this.version = 'jIRCs 0.1';
 
-jIRCs.prototype.version = 'jIRCs 0.1';
+		// accessible vars
+		this.buf = '';
+		this.queue = [];
+		this.displays = [];
+		this.channels = {};
+		this.chantypes = [];
+		this.statuses = {};
+		this.statusOrder = [];
+		this.statusSymbols = {};
+		this.chanModes = {};
+		this.userModes = [];
+		this.scrollbackSize = 500;
+		this.nickname = '';
+		this.registered = false;
+		this.connected = false;
+		this.account = false;
 
-jIRCs.prototype.nick = function(nick,pass) {
-    nick = nick.replace(" ","_");
-    while(!this.nick_regex.test(nick) && nick) {
-        nick = nick.slice(0,-1);
-    }
-    if(!nick) {
-        nick = "Guest" + Math.floor(Math.random()*9000000 + 1000000);
-    }
-    this.nickname = nick;
-    allCookies.setItem("jirc-nickname", nick);
-    this.send('CAP',['LS']);
-    if(pass) {
-        this.send('PASS',[pass]);
-    }
-    this.send('USER',[nick,nick,nick,':'+nick]);
-    this.send('NICK',[nick]);
-};
+		// hide nojs warning
+		$('.nojs').hide();
+		// attach event to login form element
+
+		this._setup();
+	},
+
+	_setup: function () {
+		var that = this;
+
+		$('form').on('submit', function (e) {
+			e.preventDefault();
+			// hide login
+			that.container.find('.login').hide();
+			// saving credentials
+			var username = $(this).find('input[name="username"]').val();
+			var password = 'foobar';
+
+			// starting up jIRCs app
+			that.connect(new SockJS("https://irc.desertbus.org/"));
+			that.nick(username, password);
+			that.display(that.container[0]);
+		});
+	},
+
+	connect: function (conn) {
+		this.conn = conn;
+		this.conn.parent = this;
+		this.conn.onopen = function(e) { this.parent.onconnect(e); };
+		this.conn.onmessage = function(e) { this.parent.onmessage(e); };
+		this.conn.onclose = function(e) { this.parent.ondisconnect(e); };
+	},
+
+	nick: function(nick,pass) {
+		nick = nick.replace(" ","_");
+		while(!this.nick_regex.test(nick) && nick) {
+			nick = nick.slice(0,-1);
+		}
+		if(!nick) {
+			nick = "Guest" + Math.floor(Math.random()*9000000 + 1000000);
+		}
+		this.nickname = nick;
+		allCookies.setItem("jirc-nickname", nick);
+		this.send('CAP',['LS']);
+		if(pass) {
+			this.send('PASS',[pass]);
+		}
+		this.send('USER',[nick,nick,nick,':'+nick]);
+		this.send('NICK',[nick]);
+	}
+
+});
 
 /* Shims */
 if(!window.console) {
     window.console = {log: function() {}};
 }
 
-if(!String.prototype.trim) {  
-    String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g,''); };  
+if(!String.prototype.trim) {
+    String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g,''); };
 }
 
 if(!Function.prototype.bind) {
@@ -86,15 +117,15 @@ if(!Function.prototype.bind) {
       // closest thing possible to the ECMAScript 5 internal IsCallable function
       throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
     }
- 
-    var aArgs = Array.prototype.slice.call(arguments, 1), 
-        fToBind = this, 
+
+    var aArgs = Array.prototype.slice.call(arguments, 1),
+        fToBind = this,
         fNOP = function () {},
         fBound = function () { return fToBind.apply(this instanceof fNOP && oThis ? this : oThis, aArgs.concat(Array.prototype.slice.call(arguments))); };
- 
+
     fNOP.prototype = this.prototype;
     fBound.prototype = new fNOP();
- 
+
     return fBound;
   };
 }
