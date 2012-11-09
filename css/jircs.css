@@ -1,9 +1,18 @@
 html, body, #jircs { height: 100%; width: 100%; margin: 0; }
 
+/* login window */
+.login { background:#999; position:relative; height:100%; }
+.login .wrapper { position:absolute; left:50%; top:50%; height:100px; width:200px; margin:-50px 0 0 -100px; text-align:center; }
+.login h2 { margin:0; }
+.login input[type="text"] { width:180px; }
+
+/* nojs window */
+.nojs { background: #F66; position: relative; height: 100%; display:none; }
+.nojs .wrapper { position: absolute; top: 50%; left: 50%; margin-top: -50px; height: 100px; width: 200px; margin-left: -100px; text-align: center; }
+.nojs h2 { margin: 0; }
+
 /* The major elements */
-.jircs_main {
-    width: 100%;
-}
+.jircs_main { width: 100%; }
 .jircs_tabbar {
     background-color: #AAA;
     border-radius: 5px 5px 0px 0px;
