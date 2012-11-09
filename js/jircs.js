@@ -28,9 +28,17 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 // disable console for ie
 var jIRCs = new Class({
 
-	initialize: function (container) {
-		this.container = $(container);
-		this.version = 'jIRCs 0.1';
+	options: {
+		'debug': false
+	},
+
+	initialize: function (server, options) {
+		this.container = $('#jircs');
+		this.server = server;
+		this.version = 'jIRCs 0.2';
+
+		// merge options
+		this.options = $.extend(true, {}, this.options, options);
 
 		// accessible vars
 		this.buf = '';
@@ -51,8 +59,8 @@ var jIRCs = new Class({
 
 		// hide nojs warning
 		$('.nojs').hide();
-		// attach event to login form element
 
+		// setup instance
 		this._setup();
 	},
 
@@ -68,10 +76,14 @@ var jIRCs = new Class({
 			var password = 'foobar';
 
 			// starting up jIRCs app
-			that.connect(new SockJS("https://irc.desertbus.org/"));
+			that.connect(new SockJS(that.server));
 			that.nick(username, password);
 			that.display(that.container[0]);
 		});
+	},
+
+	log: function (values) {
+		if(this.options.debug) console.log(values);
 	},
 
 	connect: function (conn) {
@@ -84,6 +96,7 @@ var jIRCs = new Class({
 
 	nick: function(nick,pass) {
 		nick = nick.replace(" ","_");
+
 		while(!this.nick_regex.test(nick) && nick) {
 			nick = nick.slice(0,-1);
 		}
@@ -91,7 +104,8 @@ var jIRCs = new Class({
 			nick = "Guest" + Math.floor(Math.random()*9000000 + 1000000);
 		}
 		this.nickname = nick;
-		allCookies.setItem("jirc-nickname", nick);
+		//allCookies.setItem("jirc-nickname", nick);
+
 		this.send('CAP',['LS']);
 		if(pass) {
 			this.send('PASS',[pass]);
@@ -103,8 +117,8 @@ var jIRCs = new Class({
 });
 
 /* Shims */
-if(!window.console) {
-    window.console = {log: function() {}};
+if(window.console === undefined) {
+    window.console = { log: function() {} };
 }
 
 if(!String.prototype.trim) {
@@ -165,7 +179,7 @@ if (!Array.prototype.indexOf) {
 
 /* Private interface */
 jIRCs.prototype.onconnect = function(evt) {
-    console.log("Connected");
+    this.log("Connected");
     this.setConnected(true);
     this.forEach(this.queue, this.send, this);
     this.queue = [];
@@ -178,7 +192,7 @@ jIRCs.prototype.ondisconnect = function(evt) {
             this.destroyChan(channel);
         }
     }, this);
-    console.log("Disconnected");
+    this.log("Disconnected");
     this.setConnected(false);
 };
 
@@ -195,10 +209,10 @@ jIRCs.prototype.send = function(command, args) {
         msg += ' ' + args.join(' ');
     }
     if(this.conn.readyState == 1) { //OPEN
-        console.log('>>> ' + msg);
+        this.log('>>> ' + msg);
         this.conn.send(msg + '\r\n');
     } else {
-        console.log('||| ' + msg);
+        this.log('||| ' + msg);
         this.queue.push(msg);
     }
 };

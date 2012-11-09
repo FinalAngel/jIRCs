@@ -15,7 +15,8 @@
 	<link rel="stylesheet" type="text/css" href="css/jircs.css" />
 </head>
 <body>
-<div id="jircs">
+<div id="jircs" class="jircs_main">
+	<!-- start: login form -->
 	<div class="login">
 		<div class="wrapper">
 		<h2>Choose Your Nick</h2>
@@ -27,16 +28,55 @@
 			</form>
 		</div>
 	</div>
+	<!-- end: login form -->
+
+	<!-- start: chat -->
+	<div class="jircs_tabbar"></div>
+	<div class="jircs_topic"></div>
+	<div class="jircs_auction" style="display: none;">
+		<img class="jircs_auction_image">
+		<span class="jircs_auction_title"></span>
+		<span class="jircs_auction_bidder"></span>
+		<span class="jircs_auction_bid"></span>
+		<form class="jircs_auction_form">
+			<input class="jircs_auction_input" type="text">
+			<input class="jircs_auction_submit" type="submit" value="Bid">
+		</form>
+	</div>
+	<div class="jircs_window">
+		<div class="jircs_chat" style="display: inline-block;">
+			<div class="jircs_messages" style="vertical-align: top; overflow: auto;"></div>
+			<div class="jircs_notification"></div>
+		</div>
+		<div class="jircs_userlist" style="display: inline-block; vertical-align: top; overflow: auto;"></div>
+	</div>
+	<div class="jircs_inputbar">
+		<form class="jircs_form" style="display: inline-block;">
+			<label class="jircs_name"></label>
+			<input class="jircs_input" style="display: inline-block;" type="text">
+			<input class="jircs_send" type="submit" value="Send">
+		</form>
+	</div>
+	<div class="jircs_status">
+		<div class="jircs_status_normal" style="display: inline-block; width: 60%;"><span class="jircs_status_connected">Disconnected</span> | <span class="jircs_status_account">Not Logged In</span></div>
+		<div class="jircs_status_special" style="display: inline-block; width: 39%; text-align: right;"><a class="jircs_status_gethelp" href="#">Get Help</a> | <a class="jircs_status_hideulist" href="#">Hide Userlist</a> | <a class="jircs_status_hideauction" href="#">Hide Auction Banner</a></div>
+	</div>
+	<!-- end: chat -->
+
+	<!-- start: nojs -->
 	<div class="nojs">
 		<div class="wrapper">
 			<h2>Javascript Disabled???</h2>
 			<p>Seems like somebody disabled javascript. That's just not going to work. If you want to chat, turn javascript back on, and then we can all have a good time. Ok?</p>
 		</div>
 	</div>
+	<!-- end: nojs -->
 </div>
 <script>
 jQuery(document).ready(function ($) {
-	new jIRCs('#jircs');
+	new jIRCs('https://irc.desertbus.org/', {
+		'debug': false
+	});
 });
 </script>
 </body>

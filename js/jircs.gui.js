@@ -4,68 +4,38 @@ jIRCs.prototype.display = function(container) {
 		container = scripts[scripts.length - 1].parentNode;
 	}
 
-	// Create the DOM
-	var tabbar = document.createElement('div');
-	var topic = document.createElement('div');
-	var auction = document.createElement('div');
-	var window = document.createElement('div');
-	var chat = document.createElement('div');
-	var messages = document.createElement('div');
-	var notification = document.createElement('div');
-	var userlist = document.createElement('div');
-	var inputbar = document.createElement('div');
-	var status = document.createElement('div');
-	var form = document.createElement('form');
-	var name = document.createElement('label');
-	var input = document.createElement('input');
-	var send = document.createElement('input');
-	var status_normal = document.createElement("div");
-	var status_connected = document.createElement("span");
-	var status_account = document.createElement("span");
-	var status_special = document.createElement("div");
-	var status_gethelp = document.createElement("a");
-	var status_hideulist = document.createElement("a");
-	var status_hideauction = document.createElement("a");
-	var auction_image = document.createElement("img");
-	var auction_title = document.createElement("span");
-	var auction_bidder = document.createElement("span");
-	var auction_bid = document.createElement("span");
-	var auction_form = document.createElement("form");
-	var auction_input = document.createElement("input");
-	var auction_submit = document.createElement("input");
-
 	// Save the display object
-	var disobj = {
+	var els = {
 		// DOM
 		'container': container,
-		'tabbar': tabbar,
-		'topic': topic,
-		'auction': auction,
-		'window': window,
-		'chat': chat,
-		'messages': messages,
-		'notification': notification,
-		'userlist': userlist,
-		'inputbar': inputbar,
-		'status': status,
-		'form': form,
-		'name': name,
-		'input': input,
-		'send': send,
-		'status_normal': status_normal,
-		'status_connected': status_connected,
-		'status_account': status_account,
-		'status_special': status_special,
-		'status_gethelp': status_gethelp,
-		'status_hideulist': status_hideulist,
-		'status_hideauction': status_hideauction,
-		'auction_image': auction_image,
-		'auction_title': auction_title,
-		'auction_bidder': auction_bidder,
-		'auction_bid': auction_bid,
-		'auction_form': auction_form,
-		'auction_input': auction_input,
-		'auction_submit': auction_submit,
+		'tabbar': this.container.find('.jircs_tabbar')[0],
+		'topic': this.container.find('.jircs_topic')[0],
+		'auction': this.container.find('.jircs_auction')[0],
+		'window': this.container.find('.jircs_window')[0],
+		'chat': this.container.find('.jircs_chat')[0],
+		'messages': this.container.find('.jircs_messages')[0],
+		'notification': this.container.find('.jircs_notification')[0],
+		'userlist': this.container.find('.jircs_userlist')[0],
+		'inputbar': this.container.find('.jircs_inputbar')[0],
+		'status': this.container.find('.jircs_status')[0],
+		'form': this.container.find('.jircs_form')[0],
+		'name': this.container.find('.jircs_name')[0],
+		'input': this.container.find('.jircs_input')[0],
+		'send': this.container.find('.jircs_send')[0],
+		'status_normal': this.container.find('.jircs_status_normal')[0],
+		'status_connected': this.container.find('.jircs_status_connected')[0],
+		'status_account': this.container.find('.jircs_status_account')[0],
+		'status_special': this.container.find('.jircs_status_special')[0],
+		'status_gethelp': this.container.find('.jircs_status_gethelp')[0],
+		'status_hideulist': this.container.find('.jircs_status_hideulist')[0],
+		'status_hideauction': this.container.find('.jircs_status_hideauction')[0],
+		'auction_image': this.container.find('.jircs_auction_image')[0],
+		'auction_title': this.container.find('.jircs_auction_title')[0],
+		'auction_bidder': this.container.find('.jircs_auction_bidder')[0],
+		'auction_bid': this.container.find('.jircs_auction_bid')[0],
+		'auction_form': this.container.find('.jircs_auction_form')[0],
+		'auction_input': this.container.find('.jircs_auction_input')[0],
+		'auction_submit': this.container.find('.jircs_auction_submit')[0],
 		// Vars
 		'viewing': '',
 		'tabs': {},
@@ -80,117 +50,22 @@ jIRCs.prototype.display = function(container) {
 		'note_timer': false
 	};
 
-	// Set all them fancy classes
-	container.className = "jircs_main";
-	tabbar.className = "jircs_tabbar";
-	topic.className = "jircs_topic";
-	auction.className = "jircs_auction";
-	window.className = "jircs_window";
-	chat.className = "jircs_chat";
-	messages.className = "jircs_messages";
-	notification.className = "jircs_notification";
-	userlist.className = "jircs_userlist";
-	inputbar.className = "jircs_inputbar";
-	status.className = "jircs_status";
-	form.className = "jircs_form";
-	name.className = "jircs_name";
-	input.className = "jircs_input";
-	send.className = "jircs_send";
-	status_normal.className = "jircs_status_normal";
-	status_connected.className = "jircs_status_connected";
-	status_account.className = "jircs_status_account";
-	status_special.className = "jircs_status_special";
-	status_gethelp.className = "jircs_status_gethelp";
-	status_hideulist.className = "jircs_status_hideulist";
-	status_hideauction.className = "jircs_status_hideauction";
-	auction_image.className = "jircs_auction_image";
-	auction_title.className = "jircs_auction_title";
-	auction_bidder.className = "jircs_auction_bidder";
-	auction_bid.className = "jircs_auction_bid";
-	auction_form.className = "jircs_auction_form";
-	auction_input.className = "jircs_auction_input";
-	auction_submit.className = "jircs_auction_submit";
-
-	// Set values and styles
-	container.style.overflow = "hidden";
-	chat.style.display = "inline-block";
-	userlist.style.display = "inline-block";
-	form.style.display = "inline-block";
-	input.style.display = "inline-block";
-	messages.style.verticalAlign = "top";
-	messages.style.overflow = "auto";
-	userlist.style.verticalAlign = "top";
-	userlist.style.overflow = "auto";
-	input.type = 'text';
-	send.type = "submit";
-	send.value = "Send";
-	status_normal.style.display = "inline-block";
-	status_normal.style.width = "60%";
-	status_connected.innerHTML = this.connected ? "Connected" : "Disconnected";
-	status_account.appendChild(document.createTextNode(this.account ? "Logged in as "+this.account : "Not Logged In"));
-	status_special.style.display = "inline-block";
-	status_special.style.width = "39%";
-	status_special.style.textAlign = "right";
-	status_gethelp.href = "#";
-	status_hideulist.href = "#";
-	status_hideauction.href = "#";
-	status_gethelp.innerHTML = "Get Help";
-	status_hideulist.innerHTML = disobj.options.show_userlist ? "Hide Userlist" : "Show Userlist";
-	status_hideauction.innerHTML = disobj.options.show_auction ? "Hide Auction Banner" : "Show Auction Banner";
-	auction.style.display = "none";
-	auction_input.type = "text";
-	auction_submit.type = "submit";
-	auction_submit.value = "Bid";
-
-	// Attach all those elements together
-	container.appendChild(tabbar);
-	container.appendChild(topic);
-	container.appendChild(auction);
-	container.appendChild(window);
-	container.appendChild(inputbar);
-	container.appendChild(status);
-	window.appendChild(chat);
-	window.appendChild(userlist);
-	chat.appendChild(messages);
-	chat.appendChild(notification);
-	inputbar.appendChild(form);
-	form.appendChild(name);
-	form.appendChild(input);
-	form.appendChild(send);
-	status_normal.appendChild(status_connected);
-	status_normal.appendChild(document.createTextNode(" | "));
-	status_normal.appendChild(status_account);
-	status_special.appendChild(status_gethelp);
-	status_special.appendChild(document.createTextNode(" | "));
-	status_special.appendChild(status_hideulist);
-	status_special.appendChild(document.createTextNode(" | "));
-	status_special.appendChild(status_hideauction);
-	status.appendChild(status_normal);
-	status.appendChild(status_special);
-	auction.appendChild(auction_image);
-	auction.appendChild(auction_title);
-	auction.appendChild(auction_bidder);
-	auction.appendChild(auction_bid);
-	auction.appendChild(auction_form);
-	auction_form.appendChild(auction_input);
-	auction_form.appendChild(auction_submit);
-
 	// Add event listeners
-	this.listen(container, "click", this.el_container_click, disobj);
-	this.listen(container, "mousedown", this.el_container_mousedown, disobj);
-	this.listen(container, "mouseup", this.el_container_mouseup, disobj);
-	this.listen(auction, "mouseup", this.el_auction_mouseup, disobj);
-	this.listen(form, "submit", this.el_form_submit, disobj);
-	this.listen(input, "keydown", this.el_input_keydown, disobj);
-	this.listen(status_gethelp, "click", this.el_gethelp_click, disobj);
-	this.listen(status_hideulist, "click", this.el_hideulist_click, disobj);
-	this.listen(status_hideauction, "click", this.el_hideauction_click, disobj);
-	this.listen(auction_form, "submit", this.el_auction_form_submit, disobj);
+	this.listen(container, "click", this.el_container_click, els);
+	this.listen(container, "mousedown", this.el_container_mousedown, els);
+	this.listen(container, "mouseup", this.el_container_mouseup, els);
+	this.listen(els.auction, "mouseup", this.el_auction_mouseup, els);
+	this.listen(els.form, "submit", this.el_form_submit, els);
+	this.listen(els.input, "keydown", this.el_input_keydown, els);
+	this.listen(els.status_gethelp, "click", this.el_gethelp_click, els);
+	this.listen(els.status_hideulist, "click", this.el_hideulist_click, els);
+	this.listen(els.status_hideauction, "click", this.el_hideauction_click, els);
+	this.listen(els.auction_form, "submit", this.el_auction_form_submit, els);
 
 	//set up Status window
-	this.initChan("Status", disobj);
-	this.activateChan("Status", disobj);
-	this.displays.push(disobj);
+	this.initChan("Status", els);
+	this.activateChan("Status", els);
+	this.displays.push(els);
 };
 
 jIRCs.prototype.initChan = function(channel, disobj) {
