@@ -20,8 +20,8 @@
 		<h2>Choose Your Nick</h2>
 			<form action="." method="post">
 				<label>
-					<input type="text" value="" />
-					<input type="submit" value="Join Chat" />
+					<input type="text" name="username" value="" />
+					<input type="submit" name="password" value="Join Chat" />
 				</label>
 			</form>
 		</div>
@@ -42,8 +42,13 @@ jQuery(document).ready(function ($) {
 		e.preventDefault();
 		var container = $('#jircs');
 			container.find('.login').hide();
+		// saving credentials
+		var username = $(this).find('input[name="username"]').val();
+		var password = 'foobar';
+
+		// starting up jIRCs app
 		var irc = new jIRCs(new SockJS("https://irc.desertbus.org/"));
-			irc.nick('FinalAngel', "foobar");
+			irc.nick(username, password);
 			irc.display(container[0]);
 	});
 });
